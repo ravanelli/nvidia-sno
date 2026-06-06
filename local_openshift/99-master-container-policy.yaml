@@ -1,0 +1,18 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: master
+  name: 99-master-container-policy
+spec:
+  config:
+    ignition:
+      version: 3.4.0
+    storage:
+      files:
+        - path: /etc/containers/policy.json
+          mode: 420
+          overwrite: true
+          contents:
+            compression: gzip
+            source: data:;base64,H4sIAAAAAAAC/4zOMQ7CMAwF0N2n+PIMF8jWc6AOUWKgApwocYeqyt1RI4gY8eDBsv77OwEc5erXp7HDhQBg7xtg27KwAy9aJaxFphAk26Sb3Re9cX9rBMynI8aK15pTscruk8ExhYeUc/TySjrOAA/sF/wb/cLHzKNGo0bvAAAA//8mJjls0QAAAA==

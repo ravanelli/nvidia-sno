@@ -1,0 +1,11 @@
+apiVersion: operator.openshift.io/v1
+kind: DNS
+metadata:
+  name: default
+spec:
+  upstreamResolvers:
+    policy: Sequential
+    upstreams:
+    - type: Network
+      address: 10.6.6.17
+      port: 53

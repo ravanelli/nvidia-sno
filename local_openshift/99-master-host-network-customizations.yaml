@@ -1,0 +1,40 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: master
+  name: 99-master-host-network-customizations
+spec:
+  config:
+    ignition:
+      version: 3.4.0
+    passwd:
+      users:
+        - name: core
+          passwordHash: "$6$jamyHU6tcWovxP.e$rasKzY7tDn.LlazCF6Z4osY86aaXGEFOnkDSClPCw1B/DzPn2knv/kHCwncynti2r3k8MSLwcEsyEwqkDwZd8/"
+    storage:
+      files:
+        - path: /etc/NetworkManager/dnsmasq.d/ocp-sno.conf
+          overwrite: true
+          mode: 420
+          contents:
+            compression: gzip
+            source: data:;base64,H4sIAAAAAAAC/6zMzarCMBBH8X3fZf6dlEu76sMMyXAbzBeZSMGnd6UgrkTXh/NL1UvaZ8lNu1IeVupJkkYX4j9cjhNa/tHDdUHw6BoOGfA1z5OE0NVsn6VFfP47xooVbnuBKJbxK6zZV1KKNrTQA3TLBgbDvYXn4cUfShZvujtmnu4BAAD//5RCVkdcAQAA
+
+        - path: /etc/NetworkManager/conf.d/dnsmasq.conf
+          overwrite: true
+          mode: 420
+          contents:
+            source: data:,%5Bmain%5D%0Adns%3Ddnsmasq%0A
+
+        - path: /etc/ssh/sshd_config.d/01-password-auth.conf
+          overwrite: true
+          mode: 420
+          contents:
+            source: data:,PasswordAuthentication%20yes%0A
+
+    systemd:
+      units:
+        - name: dnsmasq.service
+          enabled: false
+          mask: true
