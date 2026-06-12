@@ -10,6 +10,30 @@ The project automates the creation of a customized RHCOS live ISO that includes:
 - Container policy and DNS configuration via Butane
 - Single Node OpenShift bootstrap configuration
 
+
+Note: The 4.22 installer has as default the RHEL-9 base image, we are overriding it to use RHEL-10, via:
+osImageStream: "rhel-10"
+featureSet: TechPreviewNoUpgrade
+in the 
+install-config.yaml
+
+We are also passing the Custom image we want in the cluster via:
+root@linux:~/nvidia# cat local_openshift/99-os-layer-custom.yaml
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: master
+  name: os-layer-custom
+spec:
+  osImageURL: quay.io/ravanelli/nvidia/node-image:4.22-10.2-ocp4nv-preview-202605082215-node-image
+
+
+Is is using ravanelli repo, since this image is not part of the payload yet, and ocp will complaing about the 
+image being sign.
+
+
+
 ## Prerequisites
 
 Before running the setup script, ensure you have the following tools installed:
